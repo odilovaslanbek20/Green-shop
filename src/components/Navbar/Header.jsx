@@ -41,7 +41,7 @@ function Header() {
 				</div>
 			</header>
 
-			<div className={`${!menu ? "mr-[-100%]" : "mr-[0px]"} transition-all min-[670px]:hidden fixed top-0 right-0 w-[300px] min-h-screen bg-[#000000]/70 z-50`}>
+			<div className={`${!menu ? "mr-[-100%]" : "mr-[0px]"} transition-all min-[670px]:hidden fixed top-0 right-0 w-[300px] min-h-screen bg-[#000000]/70 backdrop-blur-md z-50`}>
 			   <div onClick={() => setMenu(false)}>
 				 <FaXmark className='text-[#fff] text-[30px] absolute right-[10px] top-[10px]'/>
 				 </div>
