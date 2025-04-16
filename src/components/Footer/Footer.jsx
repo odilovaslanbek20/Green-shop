@@ -44,7 +44,7 @@ function Footer() {
 						<Link className='flex items-center gap-[10px]'>
 							<img
 								className='w-[20px] h-[20px]'
-								src='message.svg'
+								src='Location.svg'
 								alt='message images'
 							/>
 							<div className=''>
@@ -69,7 +69,7 @@ function Footer() {
 						<a href='tel:+88 01911 717 490' className='flex items-center gap-[10px]'>
 							<img
 								className='w-[20px] h-[20px]'
-								src='message.svg'
+								src='Calling.svg'
 								alt='message images'
 							/>
 							<p className='text-[rgba(61,61,61,1)] text-[14px] font-normal font-["Inter"]'>
