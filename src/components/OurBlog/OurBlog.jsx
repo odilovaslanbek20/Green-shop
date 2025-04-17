@@ -44,7 +44,7 @@ function OurBlog() {
 				>
 					{cards?.map((card) => (
 						<SwiperSlide key={card?.id}>
-							<div className='w-full h-auto bg-[rgba(251,251,251,1)] mb-9'>
+							<div className='group w-full h-auto bg-[rgba(251,251,251,1)] mb-9 cursor-pointer'>
 								<img className='w-full' src={card?.images} alt='cards img' />
 								<div className='w-full pl-[15px] pt-[9px] pr-[11px] pb-[12px]'>
 									<span className='text-[rgba(70,163,88,1)] max-[1150px]:text-[12px] font-medium font-["Inter"] text-[14px]'>
@@ -56,7 +56,7 @@ function OurBlog() {
 									<p className='text-[rgba(114,114,114,1)] max-[1150px]:text-[12px] max-[1150px]:leading-[15px] font-["Inter"] font-normal text-[14px] leading-[22px]'>
 										{card?.text}
 									</p>
-									<Link className='text-[rgba(61,61,61,1)] flex items-center gap-[2px] font-medium font-["Inter"] text-[14px] max-[1150px]:text-[12px] mt-[9px]'>
+									<Link className='text-[rgba(61,61,61,1)] flex items-center gap-[2px] font-medium font-["Inter"] text-[14px] max-[1150px]:text-[12px] mt-[9px] group-hover:text-[rgba(70,163,88,1)]'>
 										{card?.btnText}
 										<FaArrowRightLong/>
 									</Link>
