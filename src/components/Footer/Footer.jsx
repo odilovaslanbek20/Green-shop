@@ -28,7 +28,7 @@ function Footer() {
 							<p className='text-[14px] text-[rgba(114,114,114,1)] font-["Inter"] font-normal'>We are an online plant shop offering a wide range of cheap and trendy plants.</p>
 						</div>
 						</div>
-						<div className="max-w-[354px] max-[990px]:max-w-[500px] px-[25px] py-[25px]">
+						<div className="max-w-[354px] max-[990px]:max-w-[500px] px-[10px] py-[25px]">
 							<h2 className='w-full max-[990px]:text-center font-bold text-[17px] font-["Inter"] text-[rgba(61,61,61,1)]'>Would you like to join newsletters?</h2>
 							<form className='w-full bg-[#fff] shadow-md flex items-center rounded-[6px] pl-[11px] my-[17px]'>
 								<input className='border-none outline-none w-full h-full text-[14px] font-normal font-["Inter"] text-[rgba(172,172,172,1)]' type="email" placeholder='enter your email address...'/>
