@@ -18,10 +18,10 @@ function Header() {
 					</Link>
 					<div className='flex items-center gap-[50px] max-[670px]:hidden'>
 						<div className=''>
-							<Link className='text-[rgba(61,61,61,1) font-normal text-[16px]]'>Home</Link>
+							<Link className='text-[rgba(61,61,61,1) font-normal text-[16px]] hover:text-[rgba(70,163,88,1)] transition-all'>Home</Link>
 						</div>
 						<div className=''>
-							<Link className='text-[rgba(61,61,61,1) font-normal text-[16px]]'>Shop</Link>
+							<Link className='text-[rgba(61,61,61,1) font-normal text-[16px]] hover:text-[rgba(70,163,88,1)] transition-all'>Shop</Link>
 						</div>
 					</div>
 					<div className='flex items-center gap-8 max-[380px]:gap-[20px]'>
