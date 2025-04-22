@@ -4,7 +4,7 @@ import { FiShoppingCart } from 'react-icons/fi'
 import { RiLogoutCircleRLine } from 'react-icons/ri'
 import { FaBarsStaggered } from 'react-icons/fa6'
 import { FaXmark } from 'react-icons/fa6'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
 import { Box, Tabs, Tab, TextField, Button, Paper } from '@mui/material'
 
@@ -15,9 +15,13 @@ function Header() {
 	const [register, setModalRegister] = useState(false)
 	const [userName, setUserName] = useState('')
 
-	setInterval(() => {
-		setUserName(localStorage.getItem('name'))
-	}, 1000)
+	
+	useEffect(() => {
+		const name = localStorage.getItem('name')
+		if (name) {
+			setUserName(name)
+		}
+	}, [])
 
 	const refName = useRef()
 	const refSurname = useRef()
