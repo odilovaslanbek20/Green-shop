@@ -38,7 +38,7 @@ function Cards() {
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
 			<div className='flex items-start gap-[50px] max-[850px]:flex-col'>
-				<div className='w-[350px] max-[400px]:w-full p-[18px] bg-[rgba(251,251,251,1)]'>
+				<div className='w-[350px] max-[850px]:w-full max-[400px]:w-full p-[18px] bg-[rgba(251,251,251,1)]'>
 					<h1 className='text-[rgba(61,61,61,1)] font-bold text-[18px]'>
 						Categories
 					</h1>
