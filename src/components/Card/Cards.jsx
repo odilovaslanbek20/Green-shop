@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 
 function valuetext(value) {
 	return `${value}°C`
@@ -12,11 +12,10 @@ function Cards() {
 	const [data, setData] = useState([])
 	const [data1, setData1] = useState([])
 	const [value, setValue] = useState([20, 37])
-	const [seorchParams] = useSearchParams();
+	const [seorchParams] = useSearchParams()
 
-	const categories = seorchParams.get("category")
-	console.log(categories);
-	
+	const categories = seorchParams.get('category')
+	console.log(categories)
 
 	useEffect(() => {
 		const token = '6506e8bd6ec24be5de357927'
@@ -41,22 +40,22 @@ function Cards() {
 	}
 
 	const ctigory = [
-     {
+		{
 			id: 1,
-			name: "Small",
-			count: "119",
-		 },
-		 {
+			name: 'Small',
+			count: '119',
+		},
+		{
 			id: 2,
-			name: "Medium",
-			count: "86",
-		 },
-		 {
+			name: 'Medium',
+			count: '86',
+		},
+		{
 			id: 3,
-			name: "Large",
-			count: "78",
-		 },
-	] 
+			name: 'Large',
+			count: '78',
+		},
+	]
 
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
@@ -113,15 +112,22 @@ function Cards() {
 					</div>
 
 					<div className='w-full'>
-							<h2 className='text-[rgba(61,61,61,1)] font-bold text-[18px] mt-[20px]'>
-								Size
-							</h2>
+						<h2 className='text-[rgba(61,61,61,1)] font-bold text-[18px] mt-[20px]'>
+							Size
+						</h2>
 						<div className='ml-[12px] mt-[7px]  mb-[20px]'>
-							{ctigory?.map((data) => (
-								<div key={data?.id} className="group flex items-center justify-between w-full mb-[20px]">
-								<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>{data?.name}</span>
-								<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>({data?.count})</span>
-							</div>
+							{ctigory?.map(data => (
+								<div
+									key={data?.id}
+									className='group flex items-center justify-between w-full mb-[20px]'
+								>
+									<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>
+										{data?.name}
+									</span>
+									<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>
+										({data?.count})
+									</span>
+								</div>
 							))}
 						</div>
 					</div>
