@@ -9,7 +9,7 @@ function BlogPage() {
     axios.get('https://green-shop-backend.onrender.com/api/user/blog?access_token=680bac52073c8af77e8a405f')
       .then(res => {
         if (Array.isArray(res.data)) {
-          setPosts(res.data) // Agar res.data massiv bo'lsa, posts ga saqlaymiz
+          setPosts(res.data)
         } else {
           console.error('API ma\'lumotlari massiv formatida emas', res.data)
         }
@@ -26,7 +26,7 @@ function BlogPage() {
               <div>
                 <h2 className='text-2xl font-bold mb-4'>{post.title}</h2>
                 <p className='text-gray-600 text-sm'>
-                  {post.excerpt} {/* Excerpt yoki qisqacha mazmun */}
+                  {post.excerpt}
                 </p>
               </div>
 

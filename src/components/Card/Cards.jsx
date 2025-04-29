@@ -35,6 +35,24 @@ function Cards() {
 		setValue(newValue)
 	}
 
+	const ctigory = [
+     {
+			id: 1,
+			name: "Small",
+			count: "119",
+		 },
+		 {
+			id: 2,
+			name: "Medium",
+			count: "86",
+		 },
+		 {
+			id: 3,
+			name: "Large",
+			count: "78",
+		 },
+	] 
+
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
 			<div className='flex items-start gap-[50px] max-[850px]:flex-col'>
@@ -93,21 +111,13 @@ function Cards() {
 							<h2 className='text-[rgba(61,61,61,1)] font-bold text-[18px] mt-[20px]'>
 								Size
 							</h2>
-						<div className='group ml-[12px] mt-[7px]  mb-[20px]'>
-							<div className="group flex items-center justify-between w-full mb-[20px]">
-								<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>Small</span>
-								<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>(119)</span>
+						<div className='ml-[12px] mt-[7px]  mb-[20px]'>
+							{ctigory?.map((data) => (
+								<div key={data?.id} className="group flex items-center justify-between w-full mb-[20px]">
+								<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>{data?.name}</span>
+								<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>({data?.count})</span>
 							</div>
-
-							<div className="group flex items-center justify-between w-full mb-[20px]">
-								<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>Medium</span>
-								<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>(86)</span>
-							</div>
-
-							<div className="group flex items-center justify-between w-full mb-[20px]">
-								<span className='font-["Inter"] text-[15px] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>Large</span>
-								<span className='text-[15px] font-["Inter"] font-normal group-hover:font-bold group-hover:text-[rgba(70,163,88,1)]'>(78)</span>
-							</div>
+							))}
 						</div>
 					</div>
 				</div>
