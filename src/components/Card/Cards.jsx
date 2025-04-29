@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import Slider from '@mui/material/Slider'
 import axios from 'axios'
@@ -12,6 +12,11 @@ function Cards() {
 	const [data, setData] = useState([])
 	const [data1, setData1] = useState([])
 	const [value, setValue] = useState([20, 37])
+	const [seorchParams] = useSearchParams();
+
+	const categories = seorchParams.get("category")
+	console.log(categories);
+	
 
 	useEffect(() => {
 		const token = '6506e8bd6ec24be5de357927'
