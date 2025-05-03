@@ -4,6 +4,7 @@ import Footer from './components/Footer/Footer'
 import Home from './pages/Home'
 import Admin from './pages/UserPages'
 import BlogPage from './pages/Blog'
+import CardsAdd from './pages/Addtocards'
 
 function App() {
 	return (
@@ -13,6 +14,7 @@ function App() {
 				<Route path='/' element={<Home/>} />
 				<Route path='/admin' element={<Admin/>} />
 				<Route path='/blog' element={<BlogPage/>} />
+				<Route path='/add' element={<CardsAdd/>} />
 			</Routes>
       <Footer/>
 		</>

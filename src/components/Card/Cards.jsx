@@ -3,6 +3,10 @@ import Slider from '@mui/material/Slider'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useDispatch } from "react-redux";
+import { addToCart } from '../../redux/cartSlice'
+
+
 
 function valuetext(value) {
 	return `${value}°C`
@@ -13,9 +17,16 @@ function Cards() {
 	const [data1, setData1] = useState([])
 	const [value, setValue] = useState([20, 37])
 	const [seorchParams] = useSearchParams()
+	const dispatch = useDispatch();
+
 
 	const categories = seorchParams.get('category')
 	console.log(categories)
+
+	const handleAddToCart = (product) => {
+		dispatch(addToCart(product));
+	};
+	
 
 	useEffect(() => {
 		const token = '6506e8bd6ec24be5de357927'
@@ -179,22 +190,29 @@ function Cards() {
 					<div className='grid grid-cols-3 gap-4 mt-[20px] max-[1024px]:grid-cols-2 max-[850px]:grid-cols-3 max-[685px]:grid-cols-2 max-[420px]:grid-cols-1'>
 						{data1?.map(item => (
 							<div key={item?._id} className='bg-[rgba(251,251,251,1)] border'>
-								<div className=''>
-									<img
-										className='w-full h-[250px] max-[500px]:h-[200px]'
-										src={item?.main_image}
-										alt={item?.category}
-									/>
-								</div>
-								<div className='p-[10px]'>
-									<p className='text-[rgba(61,61,61,1)] text-[16px] font-normal font-["Inter"]'>
-										{item?.title}
-									</p>
-									<span className='text-[rgba(70,163,88,1)] font-bold font-["Inter"] text-[18px]'>
-										${item?.price}
-									</span>
-								</div>
+							<div>
+								<img
+									className='w-full h-[250px] max-[500px]:h-[200px]'
+									src={item?.main_image}
+									alt={item?.category}
+								/>
 							</div>
+							<div className='p-[10px]'>
+								<p className='text-[rgba(61,61,61,1)] text-[16px] font-normal font-["Inter"]'>
+									{item?.title}
+								</p>
+								<span className='text-[rgba(70,163,88,1)] font-bold font-["Inter"] text-[18px]'>
+									${item?.price}
+								</span>
+								<button
+									onClick={() => handleAddToCart(item)}
+									className='mt-[10px] w-full py-2 bg-[rgba(70,163,88,1)] text-white font-bold rounded hover:opacity-90'
+								>
+									Add to Cart
+								</button>
+							</div>
+						</div>
+						
 						))}
 					</div>
 				</div>

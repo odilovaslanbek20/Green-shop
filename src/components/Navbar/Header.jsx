@@ -103,7 +103,7 @@ function Header() {
 							Blog
 						</Link>
 					</div>
-					<div className='flex items-center gap-8 max-[380px]:gap-[20px]'>
+					<Link to="/add" className='flex items-center gap-8 max-[380px]:gap-[20px]'>
 						<RxMagnifyingGlass className='text-[25px] cursor-pointer' />
 						<div className='relative cursor-pointer'>
 							<p className='h-[12px] w-[12px] text-[10px] absolute ml-[12px] mt-[-3px] rounded-full flex items-center justify-center text-[#fff] bg-[rgba(70,163,88,1)]'>
@@ -131,7 +131,7 @@ function Header() {
 							onClick={() => setMenu(true)}
 							className='text-[20px] cursor-pointer hidden max-[670px]:block'
 						/>
-					</div>
+					</Link>
 				</div>
 			</header>
 
