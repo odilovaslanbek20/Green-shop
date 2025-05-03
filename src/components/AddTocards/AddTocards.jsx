@@ -1,66 +1,55 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { clearCart } from '../../redux/cartSlice';
+import React from 'react'
+import useCartStore from '../../Stor/createStor'
 
 function ShoppingCart() {
-  const cartItems = useSelector((state) => state.cart.items);
+	const cart = useCartStore(state => state.cart)
+	const removeFromCart = useCartStore(state => state.removeFromCart)
+	const increaseQty = useCartStore(state => state.increaseQty)
+	const decreaseQty = useCartStore(state => state.decreaseQty)
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-
-  const dispatch = useDispatch();
-
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  };
-
-  return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h2>
-
-      {cartItems.length > 0 ? (
-        <div className="space-y-6">
-          {cartItems.map((item) => (
-            <div key={item.id} className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md hover:scale-105 transition-all duration-300">
-              <div className="flex items-center gap-4">
-                <img src={item.image} alt={item.title} className="w-24 h-24 object-cover rounded-md" />
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-800">{item.title}</h3>
-                  <p className="text-sm text-gray-600">Price: ${item.price}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-lg font-semibold text-gray-800">x{item.quantity}</span>
-                <span className="text-lg font-semibold text-green-600">${(item.price * item.quantity).toFixed(2)}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-xl text-gray-600">Your cart is empty.</p>
-      )}
-
-      {cartItems.length > 0 && (
-        <div className="mt-6 flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
-          <h3 className="text-2xl font-semibold text-gray-800">Total Price:</h3>
-          <span className="text-2xl font-bold text-green-600">${totalPrice.toFixed(2)}</span>
-        </div>
-      )}
-
-      {cartItems.length > 0 && (
-        <div className="mt-6 flex justify-between">
-          <button
-            onClick={handleClearCart}
-            className="w-1/2 py-3 bg-red-600 text-white font-bold rounded-md hover:bg-red-500 transition-all"
-          >
-            Clear Cart
-          </button>
-          <button className="w-1/2 py-3 bg-green-600 text-white font-bold rounded-md hover:bg-green-500 transition-all">
-            Proceed to Checkout
-          </button>
-        </div>
-      )}
-    </div>
-  );
+	return (
+		<div className='max-w-[600px] mx-auto mt-10 p-4 bg-white rounded shadow'>
+			<h2 className='text-2xl font-bold mb-6 text-center'>🛒 Savatcha</h2>
+			{cart.length === 0 ? (
+				<p className='text-center text-gray-500'>Savatcha bo‘sh</p>
+			) : (
+				cart.map(item => (
+					<div
+						key={item._id}
+						className='border p-4 mb-4 rounded flex justify-between items-center bg-gray-50'
+					>
+						<div>
+							<h3 className='text-lg font-semibold'>{item.title}</h3>
+							<p className='text-green-600 font-bold'>${item.price}</p>
+						</div>
+						<div className='flex items-center gap-4'>
+							<div className='flex items-center gap-2'>
+								<button
+									onClick={() => decreaseQty(item._id)}
+									className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-300'
+								>
+									-
+								</button>
+								<span className='font-bold'>{item.quantity}</span>
+								<button
+									onClick={() => increaseQty(item._id)}
+									className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-300'
+								>
+									+
+								</button>
+							</div>
+							<button
+								onClick={() => removeFromCart(item._id)}
+								className='text-red-500 hover:underline'
+							>
+								O‘chirish
+							</button>
+						</div>
+					</div>
+				))
+			)}
+		</div>
+	)
 }
 
-export default ShoppingCart;
+export default ShoppingCart
