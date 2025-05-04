@@ -15,7 +15,7 @@ function ShoppingCart() {
 		if (storedData?.state?.savatcha) {
 			const withCount = storedData.state.savatcha.map(item => ({
 				...item,
-				count: item.count || 1,
+				count: 1,
 			}))
 			setCards(withCount)
 		}
@@ -48,30 +48,25 @@ function ShoppingCart() {
 		)
 	}
 
-	const handleDelete = (id) => {
+	const handleDelete = id => {
 		deleteCard(id)
-	
+
 		setTimeout(() => {
 			const newSavatcha = useStore.getState().savatcha
 			const storedData = JSON.parse(localStorage.getItem('cards-data'))
-	
+
 			if (storedData?.state) {
-				const updated = newSavatcha.map(item => {
-					const oldItem = cards.find(c => c._id === item._id)
-					return {
-						...item,
-						count: oldItem?.count || 1
-					}
-				})
-	
+				const updated = newSavatcha.map(item => ({
+					...item,
+					count: 1,
+				}))
+
 				storedData.state.savatcha = updated
 				localStorage.setItem('cards-data', JSON.stringify(storedData))
 				setCards(updated)
 			}
 		}, 10)
 	}
-	
-	
 
 	return (
 		<section className='my-[50px] max-w-[1211px] m-auto max-[1270px]:mx-[20px] max-[775px]:flex-col flex items-start gap-[86px] max-[1115px]:gap-[30px]'>
@@ -99,7 +94,6 @@ function ShoppingCart() {
 							</div>
 
 							<div className='flex items-center justify-between sm:justify-end gap-6 flex-wrap sm:flex-nowrap w-full sm:w-auto'>
-
 								<span className='text-[16px] font-medium text-[#727272] font-["Inter"]'>
 									${item?.price}
 								</span>
@@ -123,7 +117,7 @@ function ShoppingCart() {
 								</div>
 
 								<span className='font-["Inter"] text-[#46A358] text-[16px] font-bold'>
-									${(item?.price * item.count).toFixed(2)}
+									${(item.price * item.count).toFixed(2)}
 								</span>
 
 								<RiDeleteBin6Line
