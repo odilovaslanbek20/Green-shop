@@ -7,8 +7,8 @@ import { useStore } from '../../zustand/addTocardsSlider'
 import { GoHeart } from 'react-icons/go'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
 import { FiSearch } from 'react-icons/fi'
-import { FaBars } from "react-icons/fa6";
-import { FaXmark } from "react-icons/fa6";
+import { FaBars } from 'react-icons/fa6'
+import { FaXmark } from 'react-icons/fa6'
 
 function valuetext(value) {
 	return `${value}°C`
@@ -72,9 +72,13 @@ function Cards() {
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
 			<div className='flex items-start gap-[50px] max-[950px]:flex-col'>
-				<div className={`max-[950px]:fixed max-[950px]:w-full max-[950px]:h-screen max-[950px]:bg-[#000]/70 max-[950px]:p-[20px] max-[950px]:top-0 max-[950px]:left-0 max-[950px]:opacity-0 max-[950px]:z-50 max-[950px]:flex max-[950px]:items-center max-[950px]:justify-center ${modal ? "max-[950px]:opacity-100" : "max-[950px]:opacity-0"}`}>
+				<div
+					className={`max-[950px]:fixed max-[950px]:w-full max-[950px]:h-screen max-[950px]:bg-[#000]/70 max-[950px]:p-[20px] max-[950px]:top-0 max-[950px]:left-0 max-[950px]:opacity-0 max-[950px]:z-50 max-[950px]:flex max-[950px]:items-center max-[950px]:justify-center ${
+						modal ? 'max-[950px]:opacity-100' : 'max-[950px]:opacity-0'
+					}`}
+				>
 					<div className='w-[350px] max-[850px]:w-[450px] p-[18px] relative bg-[rgba(251,251,251,1)]'>
-						<FaXmark className='text-[25px] absolute top-[10px] right-[10px]'/>
+						<FaXmark className='text-[25px] absolute top-[10px] right-[10px]' />
 						<h1 className='text-[rgba(61,61,61,1)] font-bold text-[18px]'>
 							Categories
 						</h1>
@@ -179,7 +183,7 @@ function Cards() {
 								<div className='w-full h-[2px] bg-[rgba(70,163,88,1)] transition-all group-hover:opacity-100 opacity-0'></div>
 							</div>
 						</div>
-						<FaBars className='min-[950px]:hidden text-[25px]'/>
+						<FaBars className='min-[950px]:hidden text-[25px]' />
 						<div className='max-[950px]:hidden flex items-center gap-[5px]'>
 							<p className='text-[rgba(61,61,61,1)] font-["Inter"] text-[18px] font-normal'>
 								Sort by:
@@ -192,59 +196,55 @@ function Cards() {
 						</div>
 					</div>
 
-					<div className='grid grid-cols-3 gap-4 mt-[20px] max-[1024px]:grid-cols-2 max-[850px]:grid-cols-3 max-[685px]:grid-cols-2 max-[420px]:grid-cols-1'>
+					<div className='grid grid-cols-3 gap-6 mt-6 max-[1080px]:grid-cols-2 max-[950px]:grid-cols-3 max-[720px]:grid-cols-2 max-[470px]:grid-cols-1'>
 						{data1?.map(item => (
 							<div
 								key={item?._id}
 								onClick={() => handleCardClick(item?._id)}
-								className='bg-[rgba(251,251,251,1)] border relative group overflow-hidden transition-all duration-300 hover:shadow-lg'
+								className='relative group border rounded-xl shadow-md bg-white overflow-hidden hover:shadow-lg transition-shadow duration-300'
 							>
-								<div className='relative'>
+								<div
+									className='relative'
+									onClick={() => handleCardClick(item?._id)}
+								>
 									<img
-										className='w-full h-[250px] max-[500px]:h-[200px] object-cover transition-transform duration-300 group-hover:scale-105'
 										src={item?.main_image}
-										alt={item?.category}
+										alt={item?.title}
+										className='w-full h-[250px] object-cover group-hover:scale-105 transition-transform duration-300'
 									/>
 
-									{/* Overlay - qora fon */}
 									<div
-										tabIndex={0}
-										className={`absolute inset-0 bg-black/50 bg-opacity-30 transition-opacity duration-300 z-10
-                ${activeCardId === item?._id ? 'opacity-100' : 'opacity-0'}
-                min-[1024px]:group-hover:opacity-100`}
-									></div>
-
-									{/* Tugmalar - markazdagi iconlar */}
-									<div
-										tabIndex={0}
-										className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 z-20
-                ${activeCardId === item?._id ? 'opacity-100' : 'opacity-0'}
-                min-[1024px]:group-hover:opacity-100`}
+										className={`absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center gap-4
+		                 ${
+			                 window.innerWidth < 1024
+				                 ? activeCardId === item?._id
+					                 ? 'opacity-100'
+					                 : 'opacity-0'
+				                 : 'opacity-0 group-hover:opacity-100'
+		                 } transition-opacity duration-300`}
 									>
-										<div className='flex gap-3'>
-											<div
-												onClick={() => addToCards(item)}
-												className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'
-											>
-												<AiOutlineShoppingCart className='text-[20px]' />
-											</div>
-											<div className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'>
-												<GoHeart className='text-[20px]' />
-											</div>
-											<div className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'>
-												<FiSearch className='text-[20px]' />
-											</div>
-										</div>
+										<button
+											onClick={() => addToCards(item)}
+											className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'
+										>
+											<AiOutlineShoppingCart className='text-[20px]' />
+										</button>
+										<button className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'>
+											<GoHeart className='text-[20px]' />
+										</button>
+										<button className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'>
+											<FiSearch className='text-[20px]' />
+										</button>
 									</div>
 								</div>
 
-								<div className='p-[10px]'>
-									<p className='text-[rgba(61,61,61,1)] text-[16px] font-normal font-["Inter"]'>
+								<div className='p-4'>
+									<h3 className='text-lg font-semibold text-gray-800'>
 										{item?.title}
-									</p>
-									<span className='text-[rgba(70,163,88,1)] font-bold font-["Inter"] text-[18px]'>
+									</h3>
+									<p className='text-green-600 font-bold text-[18px]'>
 										${item?.price}
-									</span>
+									</p>
 								</div>
 							</div>
 						))}
