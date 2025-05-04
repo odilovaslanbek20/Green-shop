@@ -74,7 +74,7 @@ function ShoppingCart() {
 	
 
 	return (
-		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px] max-[775px]:flex-col flex items-start gap-[86px] max-[1115px]:gap-[30px]'>
+		<section className='my-[50px] max-w-[1211px] m-auto max-[1270px]:mx-[20px] max-[775px]:flex-col flex items-start gap-[86px] max-[1115px]:gap-[30px]'>
 			<div className='w-full'>
 				{cards.length > 0 ? (
 					cards.map(item => (
