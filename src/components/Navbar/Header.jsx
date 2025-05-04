@@ -14,6 +14,7 @@ function Header() {
 	const [menu, setMenu] = useState(false)
 	const [register, setModalRegister] = useState(false)
 	const [userName, setUserName] = useState('')
+	const [dataLength, setDataLength] = useState(0)
 
 	const refName = useRef()
 	const refSurname = useRef()
@@ -82,6 +83,16 @@ function Header() {
 			})
 	}
 
+	setInterval(() => {
+		const data = JSON.parse(localStorage.getItem('cards-data'))
+
+		if (data?.state?.savatcha) {
+			setDataLength(data.state.savatcha.length)
+		} else {
+			console.log('Savatcha topilmadi')
+		}
+	}, 100)
+
 	return (
 		<>
 			<header className='max-[1270px]:mx-[20px] max-w-[1211px] m-auto mt-[25px] mb-[12px] pb-[18px] border-b-[1px] border-[rgba(70,163,88,0.5)]'>
@@ -103,11 +114,14 @@ function Header() {
 							Blog
 						</Link>
 					</div>
-					<Link to="/add" className='flex items-center gap-8 max-[380px]:gap-[20px]'>
+					<Link
+						to='/add'
+						className='flex items-center gap-8 max-[380px]:gap-[20px]'
+					>
 						<RxMagnifyingGlass className='text-[25px] cursor-pointer' />
 						<div className='relative cursor-pointer'>
 							<p className='h-[12px] w-[12px] text-[10px] absolute ml-[12px] mt-[-3px] rounded-full flex items-center justify-center text-[#fff] bg-[rgba(70,163,88,1)]'>
-								0
+								{dataLength}
 							</p>
 							<FiShoppingCart className='text-[20px]' />
 						</div>
