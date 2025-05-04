@@ -50,17 +50,27 @@ function ShoppingCart() {
 
 	const handleDelete = (id) => {
 		deleteCard(id)
+	
 		setTimeout(() => {
 			const newSavatcha = useStore.getState().savatcha
 			const storedData = JSON.parse(localStorage.getItem('cards-data'))
 	
 			if (storedData?.state) {
-				storedData.state.savatcha = newSavatcha
+				const updated = newSavatcha.map(item => {
+					const oldItem = cards.find(c => c._id === item._id)
+					return {
+						...item,
+						count: oldItem?.count || 1
+					}
+				})
+	
+				storedData.state.savatcha = updated
 				localStorage.setItem('cards-data', JSON.stringify(storedData))
-				setCards(newSavatcha)
+				setCards(updated)
 			}
 		}, 10)
 	}
+	
 	
 
 	return (
