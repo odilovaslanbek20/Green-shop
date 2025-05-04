@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useStore } from '../../zustand/addTocardsSlider'
 import { RiDeleteBin6Line } from 'react-icons/ri'
@@ -7,7 +6,11 @@ import { Link } from 'react-router-dom'
 
 function ShoppingCart() {
 	const [cards, setCards] = useState([])
-	const [discountData, setDiscountData] = useState(null)
+	const [totalPrice, setTotalPrice] = useState(0)
+	const [shipping, setShipping] = useState(16)
+	const [coupon, setCoupon] = useState("")
+	const [discount, setDiscount] = useState(0)
+	let bonus = "ASLANBEK"
 	const { deleteCard } = useStore()
 
 	useEffect(() => {
@@ -15,37 +18,52 @@ function ShoppingCart() {
 		if (storedData?.state?.savatcha) {
 			const withCount = storedData.state.savatcha.map(item => ({
 				...item,
-				count: 1,
+				count: item.count || 1,
 			}))
 			setCards(withCount)
 		}
-
-		axios
-			.get(
-				'https://green-shop-backend.onrender.com/api/features/discount?access_token=6506e8bd6ec24be5de357927'
-			)
-			.then(res => {
-				setDiscountData(res?.data)
-			})
-			.catch(error => console.log('API error:', error.message))
 	}, [])
 
 	const increment = id => {
-		setCards(prev =>
-			prev.map(item =>
+		setCards(prev => {
+			const updatedCards = prev.map(item =>
 				item._id === id ? { ...item, count: (item.count || 1) + 1 } : item
 			)
-		)
+
+			const storedData = JSON.parse(localStorage.getItem('cards-data'))
+			if (storedData?.state?.savatcha) {
+				const updatedSavatcha = updatedCards.map(item => ({
+					...item,
+					count: item.count, // Countni yangilayapmiz
+				}))
+				storedData.state.savatcha = updatedSavatcha
+				localStorage.setItem('cards-data', JSON.stringify(storedData)) // localStorage'ga yangilangan malumotlarni yozib qo'yamiz
+			}
+
+			return updatedCards
+		})
 	}
 
 	const decrement = id => {
-		setCards(prev =>
-			prev.map(item =>
+		setCards(prev => {
+			const updatedCards = prev.map(item =>
 				item._id === id
 					? { ...item, count: item.count > 1 ? item.count - 1 : 1 }
 					: item
 			)
-		)
+
+			const storedData = JSON.parse(localStorage.getItem('cards-data'))
+			if (storedData?.state?.savatcha) {
+				const updatedSavatcha = updatedCards.map(item => ({
+					...item,
+					count: item.count,
+				}))
+				storedData.state.savatcha = updatedSavatcha
+				localStorage.setItem('cards-data', JSON.stringify(storedData))
+			}
+
+			return updatedCards
+		})
 	}
 
 	const handleDelete = id => {
@@ -56,16 +74,41 @@ function ShoppingCart() {
 			const storedData = JSON.parse(localStorage.getItem('cards-data'))
 
 			if (storedData?.state) {
-				const updated = newSavatcha.map(item => ({
-					...item,
-					count: 1,
-				}))
+				const updated = newSavatcha.map(item => {
+					const existing = cards.find(c => c._id === item._id)
+					return {
+						...item,
+						count: existing?.count || 1,
+					}
+				})
 
 				storedData.state.savatcha = updated
 				localStorage.setItem('cards-data', JSON.stringify(storedData))
 				setCards(updated)
 			}
 		}, 10)
+	}
+
+	const calculateTotalPrice = items => {
+		const subtotal = items.reduce((acc, item) => acc + item.price * item.count, 0)
+		const discounted = subtotal * discount
+		const total = subtotal - discounted + shipping
+		setTotalPrice(total.toFixed(2))
+	}
+	
+
+	useEffect(() => {
+		calculateTotalPrice(cards)
+	}, [cards, discount])
+	
+
+	function handleCoupon(e) {
+		e.preventDefault()
+		if (coupon === bonus) {
+			setDiscount(0.1)
+		}else{
+			setDiscount(0)
+		}
 	}
 
 	return (
@@ -141,8 +184,10 @@ function ShoppingCart() {
 						type='text'
 						className='text-[14px] font-["Inter"] pl-[9px] pr-[110px] transition-all rounded focus:outline-4 outline-[#46A358]/50 font-normal text-[#A5A5A5] w-full h-full'
 						placeholder='Enter coupon code here...'
+						value={coupon}
+						onChange={(e) => setCoupon(e.target.value)}
 					/>
-					<button className='absolute right-0 min-w-[102px] max-w-[102px] h-full bg-[#46A358] text-[#fff] text-[15px] font-["Inter"] font-bold'>
+					<button onClick={handleCoupon} className='absolute right-0 min-w-[102px] max-w-[102px] h-full bg-[#46A358] text-[#fff] text-[15px] font-["Inter"] font-bold'>
 						Apply
 					</button>
 				</form>
@@ -152,7 +197,7 @@ function ShoppingCart() {
 							Subtotal
 						</p>
 						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
-							$2,683.00
+						${totalPrice}
 						</p>
 					</div>
 					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
@@ -160,7 +205,7 @@ function ShoppingCart() {
 							Coupon Discount
 						</p>
 						<p className='text-[15px] font-["Inter"] font-normal text-[#3D3D3D]'>
-							(-) 00.00
+							{discount}
 						</p>
 					</div>
 					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
@@ -168,15 +213,15 @@ function ShoppingCart() {
 							Shiping
 						</p>
 						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
-							$16.00
+							${shipping}
 						</p>
 					</div>
 					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
 						<p className='text-[#3D3D3D] font-bold font-["Inter"] text-[16px]'>
 							Total
 						</p>
-						<p className='text-[#46A358] font-bold font-["Inter"] text-[18px]'>
-							$2,699.00
+						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
+							${totalPrice}
 						</p>
 					</div>
 					<Link>
