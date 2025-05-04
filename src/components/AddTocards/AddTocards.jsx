@@ -8,9 +8,9 @@ function ShoppingCart() {
 	const [cards, setCards] = useState([])
 	const [totalPrice, setTotalPrice] = useState(0)
 	const [shipping, setShipping] = useState(16)
-	const [coupon, setCoupon] = useState("")
+	const [coupon, setCoupon] = useState('')
 	const [discount, setDiscount] = useState(0)
-	let bonus = "ASLANBEK"
+	let bonus = 'ASLANBEK'
 	const { deleteCard } = useStore()
 
 	useEffect(() => {
@@ -90,23 +90,24 @@ function ShoppingCart() {
 	}
 
 	const calculateTotalPrice = items => {
-		const subtotal = items.reduce((acc, item) => acc + item.price * item.count, 0)
+		const subtotal = items.reduce(
+			(acc, item) => acc + item.price * item.count,
+			0
+		)
 		const discounted = subtotal * discount
-		const total = subtotal - discounted + shipping
+		const total = subtotal - discounted + (items.length > 0 ? shipping : 0)
 		setTotalPrice(total.toFixed(2))
 	}
-	
 
 	useEffect(() => {
 		calculateTotalPrice(cards)
 	}, [cards, discount])
-	
 
 	function handleCoupon(e) {
 		e.preventDefault()
 		if (coupon === bonus) {
 			setDiscount(0.1)
-		}else{
+		} else {
 			setDiscount(0)
 		}
 	}
@@ -171,7 +172,19 @@ function ShoppingCart() {
 						</div>
 					))
 				) : (
-					<p>Your cart is empty.</p>
+					<div className='flex flex-col items-center justify-center p-6 bg-gray-100 rounded-lg shadow-lg'>
+						<img
+							className='w-[200px] h-[200px] object-contain mb-4'
+							src='noData.png'
+							alt='no data photo'
+						/>
+						<Link
+							to='/'
+							className='text-2xl font-semibold text-blue-500 hover:text-blue-700 transition-colors duration-300'
+						>
+							<p>LES'T SHOP</p>
+						</Link>
+					</div>
 				)}
 			</div>
 			<div className='min-w-[332px] max-w-[332px] max-[775px]:min-w-full max-[775px]:max-w-full'>
@@ -185,9 +198,12 @@ function ShoppingCart() {
 						className='text-[14px] font-["Inter"] pl-[9px] pr-[110px] transition-all rounded focus:outline-4 outline-[#46A358]/50 font-normal text-[#A5A5A5] w-full h-full'
 						placeholder='Enter coupon code here...'
 						value={coupon}
-						onChange={(e) => setCoupon(e.target.value)}
+						onChange={e => setCoupon(e.target.value)}
 					/>
-					<button onClick={handleCoupon} className='absolute right-0 min-w-[102px] max-w-[102px] h-full bg-[#46A358] text-[#fff] text-[15px] font-["Inter"] font-bold'>
+					<button
+						onClick={handleCoupon}
+						className='absolute right-0 min-w-[102px] max-w-[102px] h-full bg-[#46A358] text-[#fff] text-[15px] font-["Inter"] font-bold'
+					>
 						Apply
 					</button>
 				</form>
@@ -197,7 +213,7 @@ function ShoppingCart() {
 							Subtotal
 						</p>
 						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
-						${totalPrice}
+							${totalPrice}
 						</p>
 					</div>
 					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>

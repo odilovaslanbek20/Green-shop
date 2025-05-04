@@ -114,38 +114,40 @@ function Header() {
 							Blog
 						</Link>
 					</div>
-					<Link
-						to='/add'
-						className='flex items-center gap-8 max-[380px]:gap-[20px]'
-					>
+					<div className='flex items-center gap-[30px]'>
 						<RxMagnifyingGlass className='text-[25px] cursor-pointer' />
-						<div className='relative cursor-pointer'>
-							<p className='h-[12px] w-[12px] text-[10px] absolute ml-[12px] mt-[-3px] rounded-full flex items-center justify-center text-[#fff] bg-[rgba(70,163,88,1)]'>
-								{dataLength}
-							</p>
-							<FiShoppingCart className='text-[20px]' />
-						</div>
-						<div
-							onClick={() => {
-								if (!userName) setModalRegister(true)
-								else navigate('/admin')
-							}}
-							className='w-[100px] h-[35px] bg-[rgba(70,163,88,1)] rounded-[6px] flex items-center justify-center gap-1 cursor-pointer px-[8px] max-[670px]:hidden'
+						<Link
+							to='/add'
+							className='flex items-center gap-8 max-[380px]:gap-[20px]'
 						>
-							<RiLogoutCircleRLine
-								className={`text-[20px] text-[#fff] ${
-									!userName ? 'block' : 'hidden'
-								}`}
-							/>
-							<p className='text-[#fff] font-medium text-[16px] truncate'>
-								{!userName ? 'Login' : userName}
-							</p>
-						</div>
+							<div className='relative cursor-pointer'>
+								<p className='h-[12px] w-[12px] text-[10px] absolute ml-[12px] mt-[-3px] rounded-full flex items-center justify-center text-[#fff] bg-[rgba(70,163,88,1)]'>
+									{dataLength}
+								</p>
+								<FiShoppingCart className='text-[20px]' />
+							</div>
+						</Link>
+							<div
+								onClick={() => {
+									if (!userName) setModalRegister(true)
+									else navigate('/admin')
+								}}
+								className='w-[100px] h-[35px] bg-[rgba(70,163,88,1)] rounded-[6px] flex items-center justify-center gap-1 cursor-pointer px-[8px] max-[670px]:hidden'
+							>
+								<RiLogoutCircleRLine
+									className={`text-[20px] text-[#fff] ${
+										!userName ? 'block' : 'hidden'
+									}`}
+								/>
+								<p className='text-[#fff] font-medium text-[16px] truncate'>
+									{!userName ? 'Login' : userName}
+								</p>
+							</div>
 						<FaBarsStaggered
 							onClick={() => setMenu(true)}
 							className='text-[20px] cursor-pointer hidden max-[670px]:block'
 						/>
-					</Link>
+					</div>
 				</div>
 			</header>
 
@@ -171,7 +173,7 @@ function Header() {
 						onClick={() => setMenu(false)}
 						className='text-[#fff] text-[16px]'
 					>
-						Shop
+						Blog
 					</Link>
 					<div
 						onClick={() => {
@@ -227,6 +229,7 @@ function Header() {
 								<Button variant='contained' type='submit' color='primary'>
 									Login
 								</Button>
+								<Login />
 							</form>
 						)}
 
@@ -266,7 +269,6 @@ function Header() {
 										Register
 									</Button>
 								</form>
-								<Login />
 							</>
 						)}
 					</Paper>
