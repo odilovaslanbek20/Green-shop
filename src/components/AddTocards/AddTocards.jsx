@@ -1,54 +1,190 @@
-import React from 'react'
-import useCartStore from '../../Stor/createStor'
+import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useStore } from '../../zustand/addTocardsSlider'
+import { RiDeleteBin6Line } from 'react-icons/ri'
+import { FaPlus, FaMinus } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 function ShoppingCart() {
-	const cart = useCartStore(state => state.cart)
-	const removeFromCart = useCartStore(state => state.removeFromCart)
-	const increaseQty = useCartStore(state => state.increaseQty)
-	const decreaseQty = useCartStore(state => state.decreaseQty)
+	const [cards, setCards] = useState([])
+	const [discountData, setDiscountData] = useState(null)
+	const { deleteCard } = useStore()
+
+	useEffect(() => {
+		const storedData = JSON.parse(localStorage.getItem('cards-data'))
+		if (storedData?.state?.savatcha) {
+			const withCount = storedData.state.savatcha.map(item => ({
+				...item,
+				count: item.count || 1,
+			}))
+			setCards(withCount)
+		}
+
+		axios
+			.get(
+				'https://green-shop-backend.onrender.com/api/features/discount?access_token=6506e8bd6ec24be5de357927'
+			)
+			.then(res => {
+				setDiscountData(res?.data)
+			})
+			.catch(error => console.log('API error:', error.message))
+	}, [])
+
+	const increment = id => {
+		setCards(prev =>
+			prev.map(item =>
+				item._id === id ? { ...item, count: (item.count || 1) + 1 } : item
+			)
+		)
+	}
+
+	const decrement = id => {
+		setCards(prev =>
+			prev.map(item =>
+				item._id === id
+					? { ...item, count: item.count > 1 ? item.count - 1 : 1 }
+					: item
+			)
+		)
+	}
+
+	const handleDelete = (id) => {
+		deleteCard(id)
+		setTimeout(() => {
+			const newSavatcha = useStore.getState().savatcha
+			const storedData = JSON.parse(localStorage.getItem('cards-data'))
+	
+			if (storedData?.state) {
+				storedData.state.savatcha = newSavatcha
+				localStorage.setItem('cards-data', JSON.stringify(storedData))
+				setCards(newSavatcha)
+			}
+		}, 10)
+	}
+	
 
 	return (
-		<div className='max-w-[600px] mx-auto mt-10 p-4 bg-white rounded shadow'>
-			<h2 className='text-2xl font-bold mb-6 text-center'>🛒 Savatcha</h2>
-			{cart.length === 0 ? (
-				<p className='text-center text-gray-500'>Savatcha bo‘sh</p>
-			) : (
-				cart.map(item => (
-					<div
-						key={item._id}
-						className='border p-4 mb-4 rounded flex justify-between items-center bg-gray-50'
-					>
-						<div>
-							<h3 className='text-lg font-semibold'>{item.title}</h3>
-							<p className='text-green-600 font-bold'>${item.price}</p>
-						</div>
-						<div className='flex items-center gap-4'>
-							<div className='flex items-center gap-2'>
-								<button
-									onClick={() => decreaseQty(item._id)}
-									className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-300'
-								>
-									-
-								</button>
-								<span className='font-bold'>{item.quantity}</span>
-								<button
-									onClick={() => increaseQty(item._id)}
-									className='px-2 py-1 bg-gray-200 rounded hover:bg-gray-300'
-								>
-									+
-								</button>
+		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px] max-[775px]:flex-col flex items-start gap-[86px] max-[1115px]:gap-[30px]'>
+			<div className='w-full'>
+				{cards.length > 0 ? (
+					cards.map(item => (
+						<div
+							key={item?._id}
+							className='bg-[#FBFBFB] p-4 my-2 rounded flex max-[1040px]:flex-col max-[775px]:items-center max-[775px]:flex-row  flex-row items-center max-[1040px]:items-start max-[660px]:flex-col max-[660px]:items-start gap-4'
+						>
+							<div className='flex items-center gap-4 flex-1 max-[355px]:items-start max-[355px]:flex-col'>
+								<img
+									src={item?.main_image}
+									alt={item?.title}
+									className='w-20 h-20 object-cover rounded'
+								/>
+								<div>
+									<h3 className='text-[16px] font-["Inter"] text-[#3D3D3D] font-medium'>
+										{item?.title}
+									</h3>
+									<p className='text-[14px] font-["Inter"] font-normal text-[#727272]'>
+										SKU: {item?._id}
+									</p>
+								</div>
 							</div>
-							<button
-								onClick={() => removeFromCart(item._id)}
-								className='text-red-500 hover:underline'
-							>
-								O‘chirish
-							</button>
+
+							<div className='flex items-center justify-between sm:justify-end gap-6 flex-wrap sm:flex-nowrap w-full sm:w-auto'>
+
+								<span className='text-[16px] font-medium text-[#727272] font-["Inter"]'>
+									${item?.price}
+								</span>
+
+								<div className='flex items-center gap-[12px]'>
+									<div
+										onClick={() => increment(item?._id)}
+										className='bg-[#46A358] w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-pointer'
+									>
+										<FaPlus className='text-[#fff]' />
+									</div>
+									<span className='text-[17px] font-["Inter"] text-[#3D3D3D] font-medium'>
+										{item.count}
+									</span>
+									<div
+										onClick={() => decrement(item?._id)}
+										className='bg-[#46A358] w-[30px] h-[30px] rounded-full flex items-center justify-center cursor-pointer'
+									>
+										<FaMinus className='text-[#fff]' />
+									</div>
+								</div>
+
+								<span className='font-["Inter"] text-[#46A358] text-[16px] font-bold'>
+									${(item?.price * item.count).toFixed(2)}
+								</span>
+
+								<RiDeleteBin6Line
+									onClick={() => handleDelete(item?._id)}
+									className='text-[#FF4D4F] text-[20px] cursor-pointer'
+								/>
+							</div>
 						</div>
+					))
+				) : (
+					<p>Your cart is empty.</p>
+				)}
+			</div>
+			<div className='min-w-[332px] max-w-[332px] max-[775px]:min-w-full max-[775px]:max-w-full'>
+				<h2 className='text-[18px] font-["Inter"] text-[#3D3D3D] font-bold'>
+					Cart Totals
+				</h2>
+				<hr className='text-[#46A35880] my-[11px]' />
+				<form className='w-full relative h-[40px] flex items-center rounded justify-between border border-[#46A358]'>
+					<input
+						type='text'
+						className='text-[14px] font-["Inter"] pl-[9px] pr-[110px] transition-all rounded focus:outline-4 outline-[#46A358]/50 font-normal text-[#A5A5A5] w-full h-full'
+						placeholder='Enter coupon code here...'
+					/>
+					<button className='absolute right-0 min-w-[102px] max-w-[102px] h-full bg-[#46A358] text-[#fff] text-[15px] font-["Inter"] font-bold'>
+						Apply
+					</button>
+				</form>
+				<div className='my-[30px]'>
+					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
+						<p className='text-[15px] font-["Inter"] font-normal text-[#3D3D3D]'>
+							Subtotal
+						</p>
+						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
+							$2,683.00
+						</p>
 					</div>
-				))
-			)}
-		</div>
+					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
+						<p className='text-[15px] font-["Inter"] font-normal text-[#3D3D3D]'>
+							Coupon Discount
+						</p>
+						<p className='text-[15px] font-["Inter"] font-normal text-[#3D3D3D]'>
+							(-) 00.00
+						</p>
+					</div>
+					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
+						<p className='text-[15px] font-["Inter"] font-normal text-[#3D3D3D]'>
+							Shiping
+						</p>
+						<p className='text-[18px] font-["Inter"] font-medium text-[#3D3D3D]'>
+							$16.00
+						</p>
+					</div>
+					<div className='mb-[15px] flex items-center justify-between gap-[30px]'>
+						<p className='text-[#3D3D3D] font-bold font-["Inter"] text-[16px]'>
+							Total
+						</p>
+						<p className='text-[#46A358] font-bold font-["Inter"] text-[18px]'>
+							$2,699.00
+						</p>
+					</div>
+					<Link>
+						<div className='w-full h-[40px] bg-[#46A358] rounded flex items-center justify-center'>
+							<p className='text-[#fff] font-["Inter"] font-bold text-[15px]'>
+								Proceed To Checkout
+							</p>
+						</div>
+					</Link>
+				</div>
+			</div>
+		</section>
 	)
 }
 

@@ -3,7 +3,10 @@ import Slider from '@mui/material/Slider'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import useCartStore from '../../Stor/createStor'
+import { useStore } from '../../zustand/addTocardsSlider'
+import { GoHeart } from 'react-icons/go'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { FiSearch } from 'react-icons/fi'
 
 function valuetext(value) {
 	return `${value}°C`
@@ -17,9 +20,6 @@ function Cards() {
 
 	const categories = seorchParams.get('category')
 	console.log(categories)
-
-	const addToCart = useCartStore((state) => state.addToCart)
-
 
 	useEffect(() => {
 		const token = '6506e8bd6ec24be5de357927'
@@ -60,6 +60,8 @@ function Cards() {
 			count: '78',
 		},
 	]
+
+	const { addToCards } = useStore()
 
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
@@ -182,14 +184,34 @@ function Cards() {
 
 					<div className='grid grid-cols-3 gap-4 mt-[20px] max-[1024px]:grid-cols-2 max-[850px]:grid-cols-3 max-[685px]:grid-cols-2 max-[420px]:grid-cols-1'>
 						{data1?.map(item => (
-							<div key={item?._id} className='bg-[rgba(251,251,251,1)] border'>
-								<div>
+							<div
+								key={item?._id}
+								className='bg-[rgba(251,251,251,1)] border relative group overflow-hidden transition-all duration-300 hover:shadow-lg'
+							>
+								<div className='relative'>
 									<img
-										className='w-full h-[250px] max-[500px]:h-[200px]'
+										className='w-full h-[250px] max-[500px]:h-[200px] object-cover transition-transform duration-300 group-hover:scale-105'
 										src={item?.main_image}
 										alt={item?.category}
 									/>
+
+									<div className='absolute inset-0 bg-black/50 bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10'></div>
+
+									<div className='absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20'>
+										<div className='flex gap-3'>
+											<div onClick={() => addToCards(item)} className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'>
+												<AiOutlineShoppingCart className='text-[20px]' />
+											</div>
+											<div className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'>
+												<GoHeart className='text-[20px]' />
+											</div>
+											<div className='w-[40px] h-[40px] bg-white cursor-pointer border rounded flex items-center justify-center hover:bg-gray-200'>
+												<FiSearch className='text-[20px]' />
+											</div>
+										</div>
+									</div>
 								</div>
+
 								<div className='p-[10px]'>
 									<p className='text-[rgba(61,61,61,1)] text-[16px] font-normal font-["Inter"]'>
 										{item?.title}
@@ -197,12 +219,6 @@ function Cards() {
 									<span className='text-[rgba(70,163,88,1)] font-bold font-["Inter"] text-[18px]'>
 										${item?.price}
 									</span>
-									<button
-										onClick={() => addToCart(item)}
-										className='mt-[10px] w-full py-2 bg-[rgba(70,163,88,1)] text-white font-bold rounded hover:opacity-90'
-									>
-										Add to Cart
-									</button>
 								</div>
 							</div>
 						))}
