@@ -4,12 +4,11 @@ import {
 	FaBoxOpen,
 	FaMapMarkerAlt,
 	FaHeart,
-	FaTachometerAlt,
 	FaSignOutAlt,
 } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 
-const Address = () => {
+const Account = () => {
 	const [form, setForm] = useState({
 		_id: '6506e8bd6ec24be5de357927',
 		username: 'exampleuser',
@@ -331,4 +330,4 @@ const Address = () => {
 	)
 }
 
-export default Address
+export default Account
