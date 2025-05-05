@@ -1,9 +1,9 @@
-import User from '../components/UserPages/User'
+import Address from '../components/UserPages/User'
 
 function Admin() {
 	return (
 		<>
-		  <User/>
+		  <Address/>
 		</>
 	)
 }

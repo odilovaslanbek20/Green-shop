@@ -240,7 +240,7 @@ function ShoppingCart() {
 							${totalPrice}
 						</p>
 					</div>
-					<Link>
+					<Link to="/admin">
 						<div className='w-full h-[40px] bg-[#46A358] rounded flex items-center justify-center'>
 							<p className='text-[#fff] font-["Inter"] font-bold text-[15px]'>
 								Proceed To Checkout

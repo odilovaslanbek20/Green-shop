@@ -21,6 +21,7 @@ function Cards() {
 	const [activeCardId, setActiveCardId] = useState(null)
 	const [modal, setModal] = useState(false)
 
+
 	useEffect(() => {
 		const token = '6506e8bd6ec24be5de357927'
 
@@ -49,6 +50,18 @@ function Cards() {
 		}
 	}
 
+	const [isMobile, setIsMobile] = useState(false)
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 1024)
+		}
+
+		handleResize()
+		window.addEventListener('resize', handleResize)
+		return () => window.removeEventListener('resize', handleResize)
+	}, [])
+
 	const ctigory = [
 		{
 			id: 1,
@@ -69,16 +82,21 @@ function Cards() {
 
 	const { addToCards } = useStore()
 
+	console.log(modal)
+
 	return (
 		<section className='max-w-[1211px] m-auto max-[1270px]:mx-[20px]'>
 			<div className='flex items-start gap-[50px] max-[950px]:flex-col'>
 				<div
-					className={`max-[950px]:fixed max-[950px]:w-full max-[950px]:h-screen max-[950px]:bg-[#000]/70 max-[950px]:p-[20px] max-[950px]:top-0 max-[950px]:left-0 max-[950px]:opacity-0 max-[950px]:z-50 max-[950px]:flex max-[950px]:items-center max-[950px]:justify-center ${
-						modal ? 'max-[950px]:opacity-100' : 'max-[950px]:opacity-0'
+					className={`max-[950px]:fixed max-[950px]:w-full max-[950px]:h-screen max-[950px]:bg-[#000]/70 max-[950px]:p-[20px] max-[950px]:top-0 max-[950px]:left-[-100%] max-[950px]:z-50 max-[950px]:flex max-[950px]:items-center max-[950px]:justify-center ${
+						modal ? 'max-[950px]:left-0' : 'max-[950px]:left-[-100%]'
 					}`}
 				>
-					<div className='w-[350px] max-[850px]:w-[450px] p-[18px] relative bg-[rgba(251,251,251,1)]'>
-						<FaXmark className='text-[25px] absolute top-[10px] right-[10px]' />
+					<div className='w-[350px] max-[950px]:w-[450px] p-[18px] relative bg-[rgba(251,251,251,1)]'>
+						<FaXmark
+							onClick={() => setModal(false)}
+							className='min-[950px]:hidden text-[25px] absolute top-[10px] right-[10px]'
+						/>
 						<h1 className='text-[rgba(61,61,61,1)] font-bold text-[18px]'>
 							Categories
 						</h1>
@@ -129,7 +147,33 @@ function Cards() {
 							</div>
 						</div>
 
-						<div className='w-full'>
+						{modal && (
+							<div className='fixed top-0 left-0 w-full h-full bg-black/60 z-50 flex items-center justify-center'>
+								<div className='bg-white p-6 rounded-lg w-[90%] max-w-[500px] relative'>
+									<FaXmark
+										className='absolute top-3 right-3 cursor-pointer text-xl'
+										onClick={() => setNewModalOpen(false)}
+									/>
+									<img
+										src={selectedProduct?.main_image}
+										alt={selectedProduct?.title}
+										className='w-full h-[200px] object-cover rounded mb-4'
+									/>
+									<h2 className='text-xl font-bold mb-2'>
+										{selectedProduct?.title}
+									</h2>
+									<p className='text-green-600 font-bold text-[18px] mb-2'>
+										${selectedProduct?.price}
+									</p>
+									<p className='text-gray-700 text-sm'>
+										This is a demo product description. You can fetch more info
+										from API.
+									</p>
+								</div>
+							</div>
+						)}
+
+						<div className='w-full max-[950px]:hidden'>
 							<h2 className='text-[rgba(61,61,61,1)] font-bold text-[18px] mt-[20px]'>
 								Size
 							</h2>
@@ -157,7 +201,7 @@ function Cards() {
 						<div className='flex items-center gap-[34px]'>
 							<div className='group'>
 								<Link
-									to='/all-plants'
+									to='#'
 									className='group-hover:text-[rgba(70,163,88,1)] transition-all group-hover:font-bold font-["Inter"]'
 								>
 									All Plants
@@ -166,7 +210,7 @@ function Cards() {
 							</div>
 							<div className='group'>
 								<Link
-									to='/new-arrivals'
+									to='#'
 									className='group-hover:text-[rgba(70,163,88,1)] transition-all group-hover:font-bold font-["Inter"]'
 								>
 									New Arrivals
@@ -183,7 +227,9 @@ function Cards() {
 								<div className='w-full h-[2px] bg-[rgba(70,163,88,1)] transition-all group-hover:opacity-100 opacity-0'></div>
 							</div>
 						</div>
-						<FaBars className='min-[950px]:hidden text-[25px]' />
+						<div onClick={() => setModal(true)} className=''>
+							<FaBars className='min-[950px]:hidden text-[25px]' />
+						</div>
 						<div className='max-[950px]:hidden flex items-center gap-[5px]'>
 							<p className='text-[rgba(61,61,61,1)] font-["Inter"] text-[18px] font-normal'>
 								Sort by:
@@ -203,10 +249,7 @@ function Cards() {
 								onClick={() => handleCardClick(item?._id)}
 								className='relative group border rounded-xl shadow-md bg-white overflow-hidden hover:shadow-lg transition-shadow duration-300'
 							>
-								<div
-									className='relative'
-									onClick={() => handleCardClick(item?._id)}
-								>
+								<div className='relative'>
 									<img
 										src={item?.main_image}
 										alt={item?.title}
@@ -215,26 +258,35 @@ function Cards() {
 
 									<div
 										className={`absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center gap-4
-		                 ${
-			                 window.innerWidth < 1024
-				                 ? activeCardId === item?._id
-					                 ? 'opacity-100'
-					                 : 'opacity-0'
-				                 : 'opacity-0 group-hover:opacity-100'
-		                 } transition-opacity duration-300`}
+									${
+										isMobile
+											? activeCardId === item?._id
+												? 'opacity-100'
+												: 'opacity-0'
+											: 'opacity-0 group-hover:opacity-100'
+									} transition-opacity duration-300`}
 									>
-										<button
-											onClick={() => addToCards(item)}
+										<div
+											onClick={e => {
+												e.stopPropagation()
+												addToCards(item)
+											}}
 											className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'
 										>
 											<AiOutlineShoppingCart className='text-[20px]' />
-										</button>
-										<button className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'>
+										</div>
+										<div
+											onClick={e => e.stopPropagation()}
+											className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'
+										>
 											<GoHeart className='text-[20px]' />
-										</button>
-										<button className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'>
+										</div>
+										<div
+											onClick={e => e.stopPropagation()}
+											className='bg-white w-10 h-10 rounded-full flex items-center justify-center shadow hover:bg-gray-100 transition'
+										>
 											<FiSearch className='text-[20px]' />
-										</button>
+										</div>
 									</div>
 								</div>
 
